@@ -1,6 +1,7 @@
 import 'package:adigau/models/information_model.dart';
 import 'package:adigau/services/api_service.dart';
 import 'package:adigau/widgets/catagory_widget.dart';
+import 'package:adigau/widgets/thumbnail_widget.dart';
 import 'package:flutter/material.dart';
 
 class HomeScreen extends StatelessWidget {
@@ -47,11 +48,23 @@ class HomeScreen extends StatelessWidget {
                   ),
                   const Row(
                     children: [
-                      Catagory(),
-                      Catagory(),
-                      Catagory(),
-                      Catagory(),
-                    ], //TODO: 위젯 클래스 제대로 만들기
+                      Catagory(
+                        name: '카페',
+                        imgPath: 'assets/images/cafe.jpeg',
+                      ),
+                      Catagory(
+                        name: '맛집',
+                        imgPath: 'assets/images/food.jpeg',
+                      ),
+                      Catagory(
+                        name: '데이트',
+                        imgPath: 'assets/images/couple.jpeg',
+                      ),
+                      Catagory(
+                        name: '드라이브',
+                        imgPath: 'assets/images/drive.png',
+                      ),
+                    ],
                   ),
                   const SizedBox(
                     height: 10,
@@ -86,11 +99,25 @@ class HomeScreen extends StatelessWidget {
                               var information = snapshot.data![index];
                               return Container(
                                 padding: const EdgeInsets.symmetric(
-                                    horizontal: 10, vertical: 50),
+                                    horizontal: 10, vertical: 20),
                                 decoration: BoxDecoration(
                                     borderRadius: BorderRadius.circular(20),
                                     color: Theme.of(context).cardColor),
-                                child: Text(information.title),
+                                child: Padding(
+                                  padding: const EdgeInsets.symmetric(
+                                      horizontal: 20),
+                                  child: Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      const Thumbnail(
+                                          imgUrl:
+                                              'http://scontent.cdninstagram.com/v/t51.29350-15/434078755_447616284284996_8756238472872437548_n.jpg?stp=dst-jpg_e15&efg=eyJ2ZW5jb2RlX3RhZyI6ImltYWdlX3VybGdlbi4xMDgweDE5MjAuc2RyLmYyOTM1MCJ9&_nc_ht=scontent.cdninstagram.com&_nc_cat=108&_nc_ohc=cK-BmwTeiCoQ7kNvgEWP-vL&edm=APs17CUBAAAA&ccb=7-5&ig_cache_key=MzMyODUxNDYyMDc3ODE0MTQ5NQ%3D%3D.2-ccb7-5&oh=00_AYB9GV-v8lQlRbbc7U-lnG7EG5m-GzaJ08lv-nxHIfhRMg&oe=6656FE4C&_nc_sid=10d13b',
+                                          isVideo: true),
+                                      Text(information.title),
+                                    ],
+                                  ),
+                                ),
                               );
                             },
                           ),

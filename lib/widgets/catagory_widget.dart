@@ -1,7 +1,13 @@
 import 'package:flutter/material.dart';
 
 class Catagory extends StatelessWidget {
-  const Catagory({super.key});
+  final String name, imgPath;
+
+  const Catagory({
+    super.key,
+    required this.name,
+    required this.imgPath,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -16,13 +22,13 @@ class Catagory extends StatelessWidget {
               shape: BoxShape.circle,
             ),
             child: Image.asset(
-              'assets/images/cafe.jpeg',
+              imgPath,
             ),
           ),
           const SizedBox(
             height: 5,
           ),
-          const Text('카페')
+          Text(name)
         ],
       ),
       onPressed: () {},
