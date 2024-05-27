@@ -6,7 +6,7 @@ import 'package:flutter/material.dart';
 
 class HomeScreen extends StatelessWidget {
   final Future<List<InformationModel>> informations =
-      ApiService().getInformation();
+      ApiService.getInformations();
 
   HomeScreen({super.key});
 
@@ -16,25 +16,25 @@ class HomeScreen extends StatelessWidget {
       body: Column(
         children: [
           Flexible(
-            flex: 1,
+            flex: 2,
             child: Container(
-              alignment: Alignment.bottomRight,
-              child: Padding(
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 25, vertical: 40),
+              alignment: Alignment.bottomLeft,
+              child: const Padding(
+                padding: EdgeInsets.symmetric(horizontal: 15, vertical: 40),
                 child: Text(
                   '어디가유',
                   style: TextStyle(
-                    color: Theme.of(context).cardColor,
+                    color: Colors.black,
                     fontSize: 50,
-                    fontWeight: FontWeight.w600,
+                    fontFamily: 'GmarketSansBold',
+                    // fontWeight: FontWeight.w500,
                   ),
                 ),
               ),
             ),
           ),
           Flexible(
-            flex: 3,
+            flex: 7,
             child: Container(
               alignment: Alignment.center,
               decoration: BoxDecoration(
@@ -70,12 +70,12 @@ class HomeScreen extends StatelessWidget {
                     height: 10,
                   ),
                   Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 20),
+                    padding: const EdgeInsets.symmetric(horizontal: 60),
                     child: Container(
-                      height: 6,
+                      height: 3,
                       decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(20),
-                        color: Colors.black38,
+                        color: Theme.of(context).cardColor,
                       ),
                     ),
                   ),
@@ -88,7 +88,7 @@ class HomeScreen extends StatelessWidget {
                       if (snapshot.hasData) {
                         return Expanded(
                           child: ListView.separated(
-                            padding: const EdgeInsets.symmetric(horizontal: 30),
+                            padding: const EdgeInsets.symmetric(horizontal: 20),
                             separatorBuilder: (context, index) =>
                                 const SizedBox(
                               height: 10,
@@ -99,7 +99,7 @@ class HomeScreen extends StatelessWidget {
                               var information = snapshot.data![index];
                               return Container(
                                 padding: const EdgeInsets.symmetric(
-                                    horizontal: 10, vertical: 20),
+                                    horizontal: 5, vertical: 20),
                                 decoration: BoxDecoration(
                                     borderRadius: BorderRadius.circular(20),
                                     color: Theme.of(context).cardColor),
@@ -107,14 +107,88 @@ class HomeScreen extends StatelessWidget {
                                   padding: const EdgeInsets.symmetric(
                                       horizontal: 20),
                                   child: Row(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
                                     children: [
-                                      const Thumbnail(
-                                          imgUrl:
-                                              'http://scontent.cdninstagram.com/v/t51.29350-15/434078755_447616284284996_8756238472872437548_n.jpg?stp=dst-jpg_e15&efg=eyJ2ZW5jb2RlX3RhZyI6ImltYWdlX3VybGdlbi4xMDgweDE5MjAuc2RyLmYyOTM1MCJ9&_nc_ht=scontent.cdninstagram.com&_nc_cat=108&_nc_ohc=cK-BmwTeiCoQ7kNvgEWP-vL&edm=APs17CUBAAAA&ccb=7-5&ig_cache_key=MzMyODUxNDYyMDc3ODE0MTQ5NQ%3D%3D.2-ccb7-5&oh=00_AYB9GV-v8lQlRbbc7U-lnG7EG5m-GzaJ08lv-nxHIfhRMg&oe=6656FE4C&_nc_sid=10d13b',
-                                          isVideo: true),
-                                      Text(information.title),
+                                      Thumbnail(
+                                          imgUrl: information.imgUrl,
+                                          isVideo: information.isVideo),
+                                      const SizedBox(
+                                        width: 15,
+                                      ),
+                                      Expanded(
+                                        child: Column(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
+                                          children: [
+                                            Text(
+                                              information.name,
+                                              style: const TextStyle(
+                                                  fontFamily: "GmarketSansBold",
+                                                  fontSize: 15),
+                                            ),
+                                            Text(
+                                              information.location.substring(
+                                                0,
+                                                information.location
+                                                        .indexOf('로') +
+                                                    1,
+                                              ),
+                                              style:
+                                                  const TextStyle(fontSize: 8),
+                                            ),
+                                            const SizedBox(
+                                              height: 15,
+                                            ),
+                                            Row(
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment
+                                                      .spaceBetween,
+                                              children: [
+                                                SizedBox(
+                                                  width: 80,
+                                                  child: Text(
+                                                    information.tags
+                                                        .join(" ")
+                                                        .split(' ')
+                                                        .sublist(0, 3)
+                                                        .join(''),
+                                                    style: TextStyle(
+                                                        fontSize: 8,
+                                                        color: Colors.black
+                                                            .withOpacity(0.7)),
+                                                    softWrap: true,
+                                                  ),
+                                                ),
+                                                SizedBox(
+                                                  child: Row(
+                                                    children: [
+                                                      const Icon(
+                                                          Icons.favorite),
+                                                      const SizedBox(
+                                                        width: 5,
+                                                      ),
+                                                      Text(
+                                                        {
+                                                          information.like *
+                                                              1000000
+                                                        }.toString().substring(
+                                                              1,
+                                                              {
+                                                                information
+                                                                        .like *
+                                                                    1000000
+                                                              }
+                                                                  .toString()
+                                                                  .indexOf('.'),
+                                                            ),
+                                                      ),
+                                                    ],
+                                                  ),
+                                                ),
+                                              ],
+                                            )
+                                          ],
+                                        ),
+                                      ),
                                     ],
                                   ),
                                 ),
@@ -123,7 +197,7 @@ class HomeScreen extends StatelessWidget {
                           ),
                         );
                       } else {
-                        return const Text('umm');
+                        return const CircularProgressIndicator();
                       }
                     },
                   ),

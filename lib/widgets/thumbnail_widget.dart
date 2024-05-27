@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 
 class Thumbnail extends StatelessWidget {
@@ -9,18 +10,33 @@ class Thumbnail extends StatelessWidget {
   Widget build(BuildContext context) {
     return isVideo
         ? Container(
-            decoration: const BoxDecoration(color: Colors.white),
-            height: 72,
-            width: 70,
-            child: Image.network(
-              imgUrl,
-              scale: 15,
+            clipBehavior: Clip.hardEdge,
+            decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.circular(10),
+            ),
+            height: 80,
+            width: 80,
+            child: CachedNetworkImage(
+              imageUrl: imgUrl,
+              placeholder: (context, url) => const CircularProgressIndicator(),
+              errorWidget: (context, url, error) => const Icon(Icons.error),
               fit: BoxFit.cover,
             ),
           )
-        : Image.network(
-            imgUrl,
-            scale: 15,
+        : Container(
+            clipBehavior: Clip.hardEdge,
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(10),
+            ),
+            child: CachedNetworkImage(
+              imageUrl: imgUrl,
+              width: 80,
+              height: 80,
+              placeholder: (context, url) => const CircularProgressIndicator(),
+              errorWidget: (context, url, error) => const Icon(Icons.error),
+              fit: BoxFit.cover,
+            ),
           );
   }
 }
