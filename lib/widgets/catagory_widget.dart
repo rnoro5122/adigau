@@ -11,27 +11,24 @@ class Catagory extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return IconButton(
-      icon: Column(
-        children: [
-          Container(
-            width: 80,
-            height: 50,
-            clipBehavior: Clip.hardEdge,
-            decoration: const BoxDecoration(
-              shape: BoxShape.circle,
-            ),
-            child: Image.asset(
-              imgPath,
-            ),
+    return Column(
+      children: [
+        Container(
+          width: 80,
+          height: 50,
+          clipBehavior: Clip.hardEdge,
+          decoration: const BoxDecoration(
+            shape: BoxShape.circle,
           ),
-          const SizedBox(
-            height: 5,
+          child: Image.asset(
+            imgPath,
           ),
-          Text(name)
-        ],
-      ),
-      onPressed: () {},
+        ),
+        const SizedBox(
+          height: 5,
+        ),
+        Text(name)
+      ],
     );
   }
 }

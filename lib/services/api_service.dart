@@ -6,9 +6,10 @@ class ApiService {
   static const String baseUrl = 'http://127.0.0.1:8000';
   static const String items = 'items';
 
-  static Future<List<InformationModel>> getInformations() async {
+  static Future<List<InformationModel>> getInformationsByCategory(
+      String category) async {
     List<InformationModel> informationInstance = [];
-    final url = Uri.parse('$baseUrl/$items');
+    final url = Uri.parse('$baseUrl/$items/$category');
     final response = await http.get(url);
     if (response.statusCode == 200) {
       final List<dynamic> informations = jsonDecode(
@@ -21,5 +22,18 @@ class ApiService {
       }
     }
     return informationInstance;
+  }
+
+  static Future<InformationModel> getInformationsByName(
+      String category, String name) async {
+    final url = Uri.parse('$baseUrl/$items/$category/$name');
+    final response = await http.get(url);
+    if (response.statusCode == 200) {
+      final information = jsonDecode(
+        utf8.decode(response.bodyBytes),
+      );
+      return InformationModel.fromJson(information);
+    }
+    throw Error();
   }
 }

@@ -1,7 +1,16 @@
 import 'package:adigau/screens/home_screen.dart';
+import 'package:adigau/services/api_key.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_naver_map/flutter_naver_map.dart';
 
-void main() {
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await NaverMapSdk.instance.initialize(
+    clientId: ApiKey().key,
+    onAuthFailed: (ex) {
+      debugPrint("********* 네이버맵 인증오류 : $ex *********");
+    },
+  );
   runApp(const App());
 }
 
@@ -25,7 +34,7 @@ class App extends StatelessWidget {
         cardColor: const Color(0xFFF6E9B2),
         fontFamily: "GmarketSansMedium",
       ),
-      home: HomeScreen(),
+      home: const HomeScreen(),
     );
   }
 }

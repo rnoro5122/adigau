@@ -1,14 +1,27 @@
 import 'package:adigau/models/information_model.dart';
 import 'package:adigau/services/api_service.dart';
-import 'package:adigau/widgets/catagory_widget.dart';
-import 'package:adigau/widgets/thumbnail_widget.dart';
+import 'package:adigau/widgets/card_widget.dart';
 import 'package:flutter/material.dart';
 
-class HomeScreen extends StatelessWidget {
-  final Future<List<InformationModel>> informations =
-      ApiService.getInformations();
+class HomeScreen extends StatefulWidget {
+  const HomeScreen({super.key});
 
-  HomeScreen({super.key});
+  @override
+  State<HomeScreen> createState() => _HomeScreenState();
+}
+
+class _HomeScreenState extends State<HomeScreen> {
+  late Future<List<InformationModel>> informations;
+  late String category;
+  late String titleCategory;
+
+  @override
+  void initState() {
+    super.initState();
+    category = "cafes";
+    informations = ApiService.getInformationsByCategory(category);
+    titleCategory = '어디';
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -19,11 +32,12 @@ class HomeScreen extends StatelessWidget {
             flex: 2,
             child: Container(
               alignment: Alignment.bottomLeft,
-              child: const Padding(
-                padding: EdgeInsets.symmetric(horizontal: 15, vertical: 40),
+              child: Padding(
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 15, vertical: 40),
                 child: Text(
-                  '어디가유',
-                  style: TextStyle(
+                  '$titleCategory가유',
+                  style: const TextStyle(
                     color: Colors.black,
                     fontSize: 50,
                     fontFamily: 'GmarketSansBold',
@@ -46,25 +60,127 @@ class HomeScreen extends StatelessWidget {
                   const SizedBox(
                     height: 20,
                   ),
-                  const Row(
-                    children: [
-                      Catagory(
-                        name: '카페',
-                        imgPath: 'assets/images/cafe.jpeg',
-                      ),
-                      Catagory(
-                        name: '맛집',
-                        imgPath: 'assets/images/food.jpeg',
-                      ),
-                      Catagory(
-                        name: '데이트',
-                        imgPath: 'assets/images/couple.jpeg',
-                      ),
-                      Catagory(
-                        name: '드라이브',
-                        imgPath: 'assets/images/drive.png',
-                      ),
-                    ],
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 2),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        IconButton(
+                          onPressed: () {
+                            setState(() {
+                              titleCategory = '카페';
+                              category = "cafes";
+                              informations =
+                                  ApiService.getInformationsByCategory(
+                                      category);
+                            });
+                          },
+                          icon: Column(
+                            children: [
+                              Container(
+                                width: 80,
+                                height: 50,
+                                clipBehavior: Clip.hardEdge,
+                                decoration: const BoxDecoration(
+                                  shape: BoxShape.circle,
+                                ),
+                                child: Image.asset(
+                                  'assets/images/cafe.jpeg',
+                                ),
+                              ),
+                              const SizedBox(
+                                height: 5,
+                              ),
+                              const Text('카페')
+                            ],
+                          ),
+                        ),
+                        IconButton(
+                          onPressed: () {
+                            setState(() {
+                              titleCategory = '맛집';
+                              category = "restaurants";
+                              informations =
+                                  ApiService.getInformationsByCategory(
+                                      category);
+                            });
+                          },
+                          icon: Column(
+                            children: [
+                              Container(
+                                width: 80,
+                                height: 50,
+                                clipBehavior: Clip.hardEdge,
+                                decoration: const BoxDecoration(
+                                  shape: BoxShape.circle,
+                                ),
+                                child: Image.asset(
+                                  'assets/images/food.jpeg',
+                                ),
+                              ),
+                              const SizedBox(
+                                height: 5,
+                              ),
+                              const Text('맛집')
+                            ],
+                          ),
+                        ),
+                        IconButton(
+                          onPressed: () {
+                            setState(() {
+                              titleCategory = '술집';
+                              category = "pubs";
+                              informations =
+                                  ApiService.getInformationsByCategory(
+                                      category);
+                            });
+                          },
+                          icon: Column(
+                            children: [
+                              Container(
+                                width: 80,
+                                height: 50,
+                                clipBehavior: Clip.hardEdge,
+                                decoration: const BoxDecoration(
+                                  shape: BoxShape.circle,
+                                ),
+                                child: Image.asset(
+                                  'assets/images/cafe.jpeg',
+                                ),
+                              ),
+                              const SizedBox(
+                                height: 5,
+                              ),
+                              const Text('술집')
+                            ],
+                          ),
+                        ),
+                        IconButton(
+                          onPressed: () {
+                            setState(() {
+                              titleCategory = '어디';
+                            });
+                          },
+                          icon: Column(
+                            children: [
+                              SizedBox(
+                                width: 80,
+                                height: 50,
+                                child: Icon(
+                                  Icons.favorite_rounded,
+                                  size: 55,
+                                  color: Colors.red.shade400,
+                                ),
+                              ),
+                              const SizedBox(
+                                height: 5,
+                              ),
+                              const Text('찜')
+                            ],
+                          ),
+                        ),
+                      ],
+                    ),
                   ),
                   const SizedBox(
                     height: 10,
@@ -79,121 +195,42 @@ class HomeScreen extends StatelessWidget {
                       ),
                     ),
                   ),
-                  const SizedBox(
-                    height: 15,
-                  ),
                   FutureBuilder(
                     future: informations,
                     builder: (context, snapshot) {
                       if (snapshot.hasData) {
                         return Expanded(
-                          child: ListView.separated(
-                            padding: const EdgeInsets.symmetric(horizontal: 20),
-                            separatorBuilder: (context, index) =>
-                                const SizedBox(
-                              height: 10,
-                            ),
-                            scrollDirection: Axis.vertical,
-                            itemCount: snapshot.data!.length,
-                            itemBuilder: (context, index) {
-                              var information = snapshot.data![index];
-                              return Container(
-                                padding: const EdgeInsets.symmetric(
-                                    horizontal: 5, vertical: 20),
-                                decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(20),
-                                    color: Theme.of(context).cardColor),
-                                child: Padding(
-                                  padding: const EdgeInsets.symmetric(
-                                      horizontal: 20),
-                                  child: Row(
-                                    children: [
-                                      Thumbnail(
-                                          imgUrl: information.imgUrl,
-                                          isVideo: information.isVideo),
-                                      const SizedBox(
-                                        width: 15,
-                                      ),
-                                      Expanded(
-                                        child: Column(
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.start,
-                                          children: [
-                                            Text(
-                                              information.name,
-                                              style: const TextStyle(
-                                                  fontFamily: "GmarketSansBold",
-                                                  fontSize: 15),
-                                            ),
-                                            Text(
-                                              information.location.substring(
-                                                0,
-                                                information.location
-                                                        .indexOf('로') +
-                                                    1,
-                                              ),
-                                              style:
-                                                  const TextStyle(fontSize: 8),
-                                            ),
-                                            const SizedBox(
-                                              height: 15,
-                                            ),
-                                            Row(
-                                              mainAxisAlignment:
-                                                  MainAxisAlignment
-                                                      .spaceBetween,
-                                              children: [
-                                                SizedBox(
-                                                  width: 80,
-                                                  child: Text(
-                                                    information.tags
-                                                        .join(" ")
-                                                        .split(' ')
-                                                        .sublist(0, 3)
-                                                        .join(''),
-                                                    style: TextStyle(
-                                                        fontSize: 8,
-                                                        color: Colors.black
-                                                            .withOpacity(0.7)),
-                                                    softWrap: true,
-                                                  ),
-                                                ),
-                                                SizedBox(
-                                                  child: Row(
-                                                    children: [
-                                                      const Icon(
-                                                          Icons.favorite),
-                                                      const SizedBox(
-                                                        width: 5,
-                                                      ),
-                                                      Text(
-                                                        {
-                                                          information.like *
-                                                              1000000
-                                                        }.toString().substring(
-                                                              1,
-                                                              {
-                                                                information
-                                                                        .like *
-                                                                    1000000
-                                                              }
-                                                                  .toString()
-                                                                  .indexOf('.'),
-                                                            ),
-                                                      ),
-                                                    ],
-                                                  ),
-                                                ),
-                                              ],
-                                            )
-                                          ],
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                              );
+                          child: RefreshIndicator(
+                            onRefresh: () async {
+                              setState(() {
+                                informations =
+                                    ApiService.getInformationsByCategory(
+                                        category);
+                              });
                             },
+                            child: ListView.separated(
+                              padding: const EdgeInsets.symmetric(
+                                  horizontal: 20, vertical: 15),
+                              separatorBuilder: (context, index) =>
+                                  const SizedBox(
+                                height: 10,
+                              ),
+                              scrollDirection: Axis.vertical,
+                              itemCount: snapshot.data!.length,
+                              itemBuilder: (context, index) {
+                                var information = snapshot.data![index];
+                                return CardTitle(
+                                  name: information.name,
+                                  category: information.category,
+                                  titleCategory: titleCategory,
+                                  imgUrl: information.imgUrl,
+                                  location: information.location,
+                                  isVideo: information.isVideo,
+                                  likes: information.likes,
+                                  tags: information.tags,
+                                );
+                              },
+                            ),
                           ),
                         );
                       } else {
@@ -210,3 +247,5 @@ class HomeScreen extends StatelessWidget {
     );
   }
 }
+
+// ignore: camel_case
