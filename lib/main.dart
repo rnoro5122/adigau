@@ -6,7 +6,7 @@ import 'package:flutter_naver_map/flutter_naver_map.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await NaverMapSdk.instance.initialize(
-    clientId: ApiKey().key,
+    clientId: ApiKey().clientID,
     onAuthFailed: (ex) {
       debugPrint("********* 네이버맵 인증오류 : $ex *********");
     },

@@ -2,11 +2,13 @@ class InformationModel {
   final String name, location, time, description, category, imgUrl;
   final List tags;
   final bool isVideo;
-  final int likes;
+  final int id, likes;
   final double likeRatio;
+  final bool isLiked;
 
   InformationModel.fromJson(Map<String, dynamic> json)
-      : name = json['name'],
+      : id = json['id'],
+        name = json['name'],
         location = json['location'],
         time = json['time'],
         tags = json['tags'],
@@ -15,5 +17,6 @@ class InformationModel {
         isVideo = json['isVideo'],
         likes = json['likes'],
         likeRatio = json['like_ratio'],
-        imgUrl = json['img_url'];
+        imgUrl = json['img_url'],
+        isLiked = json['isLike'];
 }

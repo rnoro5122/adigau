@@ -1,6 +1,7 @@
 import 'package:adigau/models/information_model.dart';
+import 'package:adigau/screens/detail_screen.dart';
 import 'package:adigau/services/api_service.dart';
-import 'package:adigau/widgets/card_widget.dart';
+import 'package:adigau/widgets/thumbnail_widget.dart';
 import 'package:flutter/material.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -18,7 +19,7 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   void initState() {
     super.initState();
-    category = "cafes";
+    category = "zzim";
     informations = ApiService.getInformationsByCategory(category);
     titleCategory = '어디';
   }
@@ -91,7 +92,12 @@ class _HomeScreenState extends State<HomeScreen> {
                               const SizedBox(
                                 height: 5,
                               ),
-                              const Text('카페')
+                              const Text(
+                                '카페',
+                                style: TextStyle(
+                                  color: Colors.white,
+                                ),
+                              ),
                             ],
                           ),
                         ),
@@ -121,7 +127,12 @@ class _HomeScreenState extends State<HomeScreen> {
                               const SizedBox(
                                 height: 5,
                               ),
-                              const Text('맛집')
+                              const Text(
+                                '맛집',
+                                style: TextStyle(
+                                  color: Colors.white,
+                                ),
+                              )
                             ],
                           ),
                         ),
@@ -151,13 +162,22 @@ class _HomeScreenState extends State<HomeScreen> {
                               const SizedBox(
                                 height: 5,
                               ),
-                              const Text('술집')
+                              const Text(
+                                '술집',
+                                style: TextStyle(
+                                  color: Colors.white,
+                                ),
+                              )
                             ],
                           ),
                         ),
                         IconButton(
                           onPressed: () {
                             setState(() {
+                              category = "zzim";
+                              informations =
+                                  ApiService.getInformationsByCategory(
+                                      category);
                               titleCategory = '어디';
                             });
                           },
@@ -175,7 +195,12 @@ class _HomeScreenState extends State<HomeScreen> {
                               const SizedBox(
                                 height: 5,
                               ),
-                              const Text('찜')
+                              const Text(
+                                '찜',
+                                style: TextStyle(
+                                  color: Colors.white,
+                                ),
+                              )
                             ],
                           ),
                         ),
@@ -195,12 +220,26 @@ class _HomeScreenState extends State<HomeScreen> {
                       ),
                     ),
                   ),
+                  const SizedBox(
+                    height: 10,
+                  ),
                   FutureBuilder(
                     future: informations,
                     builder: (context, snapshot) {
-                      if (snapshot.hasData) {
+                      if (snapshot.data?.isEmpty == true) {
+                        return const Column(
+                          children: [
+                            SizedBox(
+                              height: 180,
+                            ),
+                            Text('찜하기 리스트가 비어있습니다.'),
+                            Text('마음에 드는 장소에 하트를 눌러 찜할 수 있어요!')
+                          ],
+                        );
+                      } else if (snapshot.hasData) {
                         return Expanded(
                           child: RefreshIndicator(
+                            color: Theme.of(context).cardColor,
                             onRefresh: () async {
                               setState(() {
                                 informations =
@@ -208,28 +247,158 @@ class _HomeScreenState extends State<HomeScreen> {
                                         category);
                               });
                             },
-                            child: ListView.separated(
-                              padding: const EdgeInsets.symmetric(
-                                  horizontal: 20, vertical: 15),
-                              separatorBuilder: (context, index) =>
-                                  const SizedBox(
-                                height: 10,
+                            child: Padding(
+                              padding:
+                                  const EdgeInsets.symmetric(horizontal: 10),
+                              child: Container(
+                                clipBehavior: Clip.hardEdge,
+                                decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(20)),
+                                child: ListView.separated(
+                                  padding:
+                                      const EdgeInsets.symmetric(vertical: 2),
+                                  separatorBuilder: (context, index) =>
+                                      const SizedBox(
+                                    height: 10,
+                                  ),
+                                  scrollDirection: Axis.vertical,
+                                  itemCount: snapshot.data!.length,
+                                  itemBuilder: (context, index) {
+                                    var information = snapshot.data![index];
+                                    return GestureDetector(
+                                      onTap: () {
+                                        Navigator.push(
+                                          context,
+                                          PageRouteBuilder(
+                                            pageBuilder: (context, animation,
+                                                    secondaryAnimation) =>
+                                                DetailScreen(
+                                                    id: information.id,
+                                                    name: information.name,
+                                                    address:
+                                                        information.location,
+                                                    category:
+                                                        information.category,
+                                                    titleCategory:
+                                                        titleCategory),
+                                          ),
+                                        );
+                                      },
+                                      child: Container(
+                                        padding: const EdgeInsets.symmetric(
+                                            horizontal: 5, vertical: 20),
+                                        decoration: BoxDecoration(
+                                            borderRadius:
+                                                BorderRadius.circular(20),
+                                            color: Theme.of(context).cardColor),
+                                        child: Padding(
+                                          padding: const EdgeInsets.symmetric(
+                                              horizontal: 20),
+                                          child: Row(
+                                            children: [
+                                              Thumbnail(
+                                                name: information.name,
+                                                imgUrl: information.imgUrl,
+                                                isVideo: information.isVideo,
+                                              ),
+                                              const SizedBox(
+                                                width: 15,
+                                              ),
+                                              Expanded(
+                                                child: Column(
+                                                  crossAxisAlignment:
+                                                      CrossAxisAlignment.start,
+                                                  children: [
+                                                    Text(
+                                                      information.name,
+                                                      style: const TextStyle(
+                                                          fontFamily:
+                                                              "GmarketSansBold",
+                                                          fontSize: 15),
+                                                    ),
+                                                    Text(
+                                                      information.location
+                                                          .split(" ")
+                                                          .sublist(0, 3)
+                                                          .join(" "),
+                                                      style: const TextStyle(
+                                                          fontSize: 8),
+                                                    ),
+                                                    const SizedBox(
+                                                      height: 15,
+                                                    ),
+                                                    Row(
+                                                      children: [
+                                                        SizedBox(
+                                                          width: 80,
+                                                          child: Text(
+                                                            information.tags
+                                                                .join(" ")
+                                                                .split(' ')
+                                                                .sublist(0, 3)
+                                                                .join(''),
+                                                            style: TextStyle(
+                                                                fontSize: 8,
+                                                                color: Colors
+                                                                    .black
+                                                                    .withOpacity(
+                                                                        0.7)),
+                                                            softWrap: true,
+                                                          ),
+                                                        ),
+                                                        const SizedBox(
+                                                          width: 50,
+                                                        ),
+                                                        SizedBox(
+                                                          child: Row(
+                                                            mainAxisAlignment:
+                                                                MainAxisAlignment
+                                                                    .start,
+                                                            children: [
+                                                              IconButton(
+                                                                  onPressed:
+                                                                      () {
+                                                                    setState(
+                                                                        () {
+                                                                      ApiService().postIsLiked(
+                                                                          information
+                                                                              .id,
+                                                                          !information
+                                                                              .isLiked);
+                                                                      informations =
+                                                                          ApiService.getInformationsByCategory(
+                                                                              category);
+                                                                    });
+                                                                  },
+                                                                  icon: information
+                                                                          .isLiked
+                                                                      ? const Icon(
+                                                                          Icons
+                                                                              .favorite_rounded)
+                                                                      : const Icon(
+                                                                          Icons
+                                                                              .favorite_border_rounded)),
+                                                              Text(
+                                                                information
+                                                                    .likes
+                                                                    .toString(),
+                                                              ),
+                                                            ],
+                                                          ),
+                                                        ),
+                                                      ],
+                                                    )
+                                                  ],
+                                                ),
+                                              ),
+                                            ],
+                                          ),
+                                        ),
+                                      ),
+                                    );
+                                  },
+                                ),
                               ),
-                              scrollDirection: Axis.vertical,
-                              itemCount: snapshot.data!.length,
-                              itemBuilder: (context, index) {
-                                var information = snapshot.data![index];
-                                return CardTitle(
-                                  name: information.name,
-                                  category: information.category,
-                                  titleCategory: titleCategory,
-                                  imgUrl: information.imgUrl,
-                                  location: information.location,
-                                  isVideo: information.isVideo,
-                                  likes: information.likes,
-                                  tags: information.tags,
-                                );
-                              },
                             ),
                           ),
                         );
