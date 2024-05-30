@@ -18,5 +18,5 @@ class InformationModel {
         likes = json['likes'],
         likeRatio = json['like_ratio'],
         imgUrl = json['img_url'],
-        isLiked = json['isLike'];
+        isLiked = json['isLiked'];
 }
