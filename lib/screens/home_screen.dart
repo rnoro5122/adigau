@@ -156,7 +156,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                   shape: BoxShape.circle,
                                 ),
                                 child: Image.asset(
-                                  'assets/images/cafe.jpeg',
+                                  'assets/images/pub.png',
                                 ),
                               ),
                               const SizedBox(
