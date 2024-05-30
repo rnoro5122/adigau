@@ -44,7 +44,7 @@ class ApiService {
     await http.put(url, headers: <String, String>{
       'Content-Type': 'application/x-www-form-urlencoded',
     }, body: {
-      'isLike': isLiked.toString(),
+      'isLiked': isLiked.toString(),
     });
   }
 }
