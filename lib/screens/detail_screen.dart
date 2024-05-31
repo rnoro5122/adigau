@@ -267,22 +267,15 @@ class _DetailScreenState extends State<DetailScreen> {
                                         style: const TextStyle(fontSize: 10),
                                       ),
                                       Padding(
-                                        padding: const EdgeInsets.only(top: 1),
+                                        padding: const EdgeInsets.only(top: 20),
                                         child: SizedBox(
-                                          height: 110,
-                                          child: DraggableScrollableSheet(
-                                            maxChildSize: 0.8,
-                                            builder:
-                                                (context, scrollController) {
-                                              return SingleChildScrollView(
-                                                controller: scrollController,
-                                                child: Text(
-                                                  information.description,
-                                                  style: const TextStyle(
-                                                      fontSize: 12),
-                                                ),
-                                              );
-                                            },
+                                          height: 100,
+                                          child: SingleChildScrollView(
+                                            child: Text(
+                                              information.description,
+                                              style:
+                                                  const TextStyle(fontSize: 12),
+                                            ),
                                           ),
                                         ),
                                       ),

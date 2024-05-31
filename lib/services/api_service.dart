@@ -41,10 +41,14 @@ class ApiService {
 
   void postIsLiked(int id, bool isLiked) async {
     final url = Uri.parse('$baseUrl/zzim/$id');
-    await http.put(url, headers: <String, String>{
-      'Content-Type': 'application/x-www-form-urlencoded',
-    }, body: {
-      'isLiked': isLiked.toString(),
-    });
+    await http.put(
+      url,
+      headers: <String, String>{
+        'Content-Type': 'application/x-www-form-urlencoded',
+      },
+      body: {
+        'isLiked': isLiked.toString(),
+      },
+    );
   }
 }

@@ -356,28 +356,30 @@ class _HomeScreenState extends State<HomeScreen> {
                                                                     .start,
                                                             children: [
                                                               IconButton(
-                                                                  onPressed:
-                                                                      () {
-                                                                    setState(
-                                                                        () {
-                                                                      ApiService().postIsLiked(
-                                                                          information
-                                                                              .id,
-                                                                          !information
-                                                                              .isLiked);
-                                                                      informations =
-                                                                          ApiService.getInformationsByCategory(
-                                                                              category);
-                                                                    });
-                                                                  },
-                                                                  icon: information
-                                                                          .isLiked
-                                                                      ? const Icon(
-                                                                          Icons
-                                                                              .favorite_rounded)
-                                                                      : const Icon(
-                                                                          Icons
-                                                                              .favorite_border_rounded)),
+                                                                onPressed:
+                                                                    () async {
+                                                                  ApiService().postIsLiked(
+                                                                      information
+                                                                          .id,
+                                                                      !information
+                                                                          .isLiked);
+                                                                  await Future.delayed(
+                                                                      const Duration(
+                                                                          milliseconds:
+                                                                              100)); // sleep 대신 Future.delayed 사용
+                                                                  setState(() {
+                                                                    informations =
+                                                                        ApiService.getInformationsByCategory(
+                                                                            category);
+                                                                  }); // UI 업데이트
+                                                                },
+                                                                icon: Icon(information
+                                                                        .isLiked
+                                                                    ? Icons
+                                                                        .favorite
+                                                                    : Icons
+                                                                        .favorite_border),
+                                                              ),
                                                               Text(
                                                                 information
                                                                     .likes
